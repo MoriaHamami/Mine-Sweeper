@@ -1,0 +1,67 @@
+body {
+  background-color: rgb(48, 117, 42);
+  color: white;
+}
+
+table {
+  margin: auto;
+}
+
+.cell {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-style: bold;
+  font-size: 1.2em;
+  background-color: rgb(174, 173, 173);
+}
+
+.color-1 {
+  color:blue;
+}
+.color-2 {
+  color:green;
+}
+.color-3 {
+  color:red;
+}
+.color-4 {
+  color:darkblue;
+}
+.color-5 {
+  color:purple;
+}
+.color-6 {
+  color:rgb(39, 143, 136);
+}
+.color-7 {
+  color:blue;
+}
+.color-8 {
+  color:blue;
+}
+
+.hidden {
+  display: none;
+}
+
+.victorious {
+  font-size: 80px;
+  color: rgb(255, 212, 104);
+}
+
+button {
+  background-color: rgb(226, 192, 148);
+  padding: 13px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: rgb(219, 217, 189);
+}
+
+img {
+  height: 20px;
+  transform: scaleX(-1);
+}
