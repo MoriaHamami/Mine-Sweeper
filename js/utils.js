@@ -1,12 +1,30 @@
 'use strict'
 
 function startTimer() {
-    gStartTime = Date.now()
+    var elTimer = document.querySelector('.timer span')
+    var seconds = 0
+    var minutes = 0
+    var hours = 0
+
     gInterval = setInterval(() => {
-        const seconds = (Date.now() - gStartTime) / 1000
-        var elH2 = document.querySelector('.time')
-        elH2.innerText = seconds.toFixed(3)
-    }, 50);
+
+        seconds += 1;
+        if (seconds === 60) {
+            seconds = 0
+            minutes++
+            if (minutes === 60) {
+                minutes = 0
+                hours++
+            }
+        }
+
+        const h = hours < 10 ? '0' + hours : hours
+        const m = minutes < 10 ? '0' + minutes : minutes
+        const s = seconds < 10 ? '0' + seconds : seconds
+
+        elTimer.innerText = ` ${h} : ${m} : ${s}`
+
+    }, 1000)
 }
 
 function resetTime() {
@@ -93,9 +111,9 @@ function renderBoard(mat, selector) {
         strHTML += '<tr>'
         for (var j = 0; j < mat[0].length; j++) {
 
-            const className = `cell cell-${i}-${j} isShown`
+            const className = `cell cell-${i}-${j}`
 
-            strHTML += `<td onclick="cellClicked(this, ${i}, ${j}, event)" class="${className}"></td>`
+            strHTML += `<td oncontextmenu="return false;" onmouseup="cellClicked(this, ${i}, ${j}, event)" class="${className}"></td>`
         }
         strHTML += '</tr>'
     }
@@ -105,9 +123,11 @@ function renderBoard(mat, selector) {
     elContainer.innerHTML = strHTML
 }
 
-function renderCell(location, value) {
+function renderCell(location, value, isShown) {
     const elCell = document.querySelector(`.cell-${location.i}-${location.j}`)
     elCell.innerHTML = value
+    if (isShown) elCell.style.backgroundColor = 'rgb(142, 124, 124)'
+
 }
 
 function onMark(elBtn) {
@@ -129,9 +149,9 @@ function getEmptyRandCells(amount, board, currLocation) {
     const idxOptions = Array.from(Array(boardSize).keys())
 
     //Remove current idx from array of options
-    const currIdx = currLocation.i * board[0].length + currLocation.j 
+    const currIdx = currLocation.i * board[0].length + currLocation.j
     idxOptions.splice(currIdx, 1)
-    
+
     for (var i = 0; i < amount; i++) {
         const idx = getRandomItem(idxOptions)
         // Find indexes by converting array idx to mat idx
@@ -141,7 +161,7 @@ function getEmptyRandCells(amount, board, currLocation) {
 
         const idxToRemove = idxOptions.indexOf(idx)
         idxOptions.splice(idxToRemove, 1)
-        
+
     }
     return emptyCells
 }
@@ -157,62 +177,6 @@ function getRandomItem(arr) {
     return item
 }
 
-// // Move the player by keyboard arrows
-// function onHandleKey(event) {
-//     const i = gGamerPos.i
-//     const j = gGamerPos.j
-//     console.log('event.key:', event.key)
-
-//     switch (event.key) {
-//         case 'ArrowLeft':
-//             moveTo(i, j - 1)
-//             break
-//         case 'ArrowRight':
-//             moveTo(i, j + 1)
-//             break
-//         case 'ArrowUp':
-//             moveTo(i - 1, j)
-//             break
-//         case 'ArrowDown':
-//             moveTo(i + 1, j)
-//             break
-//     }
-// }
-
-// // Move the player to a specific location
-// function moveTo(i, j) {
-//     console.log(i, j)
-//     const targetCell = gBoard[i][j]
-//     if (targetCell.type === WALL) return
-
-//     // Calculate distance to make sure we are moving to a neighbor cell
-//     const iAbsDiff = Math.abs(i - gGamerPos.i)
-//     const jAbsDiff = Math.abs(j - gGamerPos.j)
-
-//     // If the clicked Cell is one of the four allowed
-//     if ((iAbsDiff === 1 && jAbsDiff === 0) || (jAbsDiff === 1 && iAbsDiff === 0)) {
-
-//         if (targetCell.gameElement === BALL) {
-//             console.log('Collecting!')
-//         }
-
-//         // DONE: Move the gamer
-//         // REMOVING FROM
-//         // update Model
-//         gBoard[gGamerPos.i][gGamerPos.j].gameElement = null
-//         // update DOM
-//         renderCell(gGamerPos, '')
-
-//         // ADD TO
-//         // update Model
-//         targetCell.gameElement = GAMER
-//         gGamerPos = { i, j }
-//         // update DOM
-//         renderCell(gGamerPos, GAMER_IMG)
-
-//     }
-
-// }
 
 // // Returns the class name for a specific cell
 // function getClassName(location) {
@@ -225,21 +189,6 @@ function getRandomItem(arr) {
 //     const cellSelector = '.' + getClassName(location) // cell-i-j
 //     const elCell = document.querySelector(cellSelector)
 //     elCell.innerHTML = value
-// }
-
-// function movePiece(elFromCell, elToCell) {
-
-//     var fromCoord = getCellCoord(elFromCell.id)
-//     var toCoord = getCellCoord(elToCell.id)
-
-//     // update the MODEL
-//     var piece = gBoard[fromCoord.i][fromCoord.j]
-//     gBoard[fromCoord.i][fromCoord.j] = ''
-//     gBoard[toCoord.i][toCoord.j] = piece
-//     // update the DOM
-//     elFromCell.innerText = ''
-//     elToCell.innerText = piece
-
 // }
 
 // function shuffle(items) {

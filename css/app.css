@@ -1,6 +1,6 @@
 body {
-  background-color: rgb(48, 117, 42);
-  color: white;
+  background-color: rgb(72, 155, 181);
+  color: rgb(239, 223, 223);
 }
 
 table {
@@ -13,7 +13,12 @@ table {
   text-align: center;
   font-style: bold;
   font-size: 1.2em;
-  background-color: rgb(174, 173, 173);
+  background-color: rgb(171, 158, 158);
+  cursor: pointer;
+}
+
+.cell:hover {
+  background-color: rgb(142, 124, 124);
 }
 
 .color-1 {
@@ -41,25 +46,23 @@ table {
   color:blue;
 }
 
-.hidden {
-  display: none;
-}
-
 .victorious {
   font-size: 80px;
   color: rgb(255, 212, 104);
 }
 
 button {
-  background-color: rgb(226, 192, 148);
+  background-color: rgb(171, 158, 158);
   padding: 13px;
   font-size: 14px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: rgb(219, 217, 189);
+  background-color: rgb(142, 124, 124);
 }
+
+
 
 img {
   height: 20px;
