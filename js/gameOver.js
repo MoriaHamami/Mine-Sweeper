@@ -3,8 +3,8 @@
 function checkGameOver(location) {
     const boardSize = gBoard.length * gBoard[0].length
     const currCell = gBoard[location.i][location.j]
-
     if (!gGame.lives) playerLost(currCell, location)
+    // if(gGame.isManual)
     else if (gGame.shownCount + gGame.corrMarkedCount === boardSize) playerWon()
 
 }

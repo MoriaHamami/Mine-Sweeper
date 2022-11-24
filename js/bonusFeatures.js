@@ -6,6 +6,7 @@ const SAFE = '✅'
 var gIsHint
 var gIsPuttingMines
 var gMineLocations
+var gMinesCount
 
 function showSafeCell(elBtn) {
 
@@ -115,9 +116,10 @@ function manual(elBtn) {
 
     if (gGame.isManual) {
         gGame.isManual = false
-        // const elMsg = document.querySelector('.msg')
-        // elMsg.hidden = false
-        // gIsPuttingMines = false
+        const elMsg = document.querySelector('.msg')
+        elMsg.hidden = true
+        gIsPuttingMines = false
+        gMinesCount = 0
         gMineLocations = []
         restartVars()
         elBtn.style.backgroundColor = 'rgb(199, 194, 194)'
@@ -136,11 +138,13 @@ function letUserPutMines(i, j) {
         curCell.isShown = false
         const idxToRemove = gMineLocations.indexOf({ i, j })
         gMineLocations.splice(idxToRemove, 1)
+        gMinesCount--
         renderCell({ i, j }, null, false)
     } else {
         curCell.isMine = true
         curCell.isShown = true
         gMineLocations.push({ i, j })
+        gMinesCount++
         renderCell({ i, j }, MINE_IMG, true)
     }
 }

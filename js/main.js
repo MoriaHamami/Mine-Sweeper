@@ -43,6 +43,7 @@ function initGame() {
     gIsFirstClick = true
     gIsHint = false
     gIsPuttingMines = false
+    gMinesCount=0
     gMineLocations = []
 }
 
@@ -55,6 +56,8 @@ function restartVars() {
     gIsHint = false
     gGame.corrMarkedCount = 0
     gGame.shownCount = 0
+    gMinesCount=0
+    console.log('gMinesCount:', gMinesCount)
     updateIcons(1, '.restart-btn', NORMAL)
 
     gGame.lives = 3
