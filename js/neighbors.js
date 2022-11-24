@@ -1,0 +1,88 @@
+'use strict'
+
+function showNearNegs(location) {
+    const currCell = gBoard[location.i][location.j]
+    if (currCell.minesAroundCount) { // If there is a number in cell
+        currCell.isShown = true
+        gGame.shownCount++
+        const strHTML = `<span class="color-${currCell.minesAroundCount}">${currCell.minesAroundCount}</span>`
+        renderCell(location, strHTML, currCell.isShown)
+    } else { // If there is an empty cell
+        // Show current cell
+        currCell.isShown = true
+        gGame.shownCount++
+        renderCell(location, null, currCell.isShown)
+        // Check other cells
+        expandShown(gBoard, location.i, location.j)
+    }
+}
+
+function expandShown(board, i, j) {
+
+    for (var nextI = i - 1; nextI <= i + 1; nextI++) {
+        // Skip if cell is not on board
+        if (nextI < 0 || nextI >= board.length) continue
+        for (var nextJ = j - 1; nextJ <= j + 1; nextJ++) {
+            // Skip if the cell is not on board
+            if (nextJ < 0 || nextJ >= board[0].length) continue
+            // Skip if we checked this cell
+            if (nextI === i && nextJ === j) continue
+
+            const currCell = gBoard[nextI][nextJ]
+            // Skip if this is a marked, or shown cell 
+            if (currCell.isMarked || currCell.isShown) continue
+
+            // If found a cell to open, reveal it
+            recurRevealCells(board, nextI, nextJ)
+        }
+    }
+
+}
+
+function recurRevealCells(board, nextI, nextJ) {
+    const currCell = gBoard[nextI][nextJ]
+    currCell.isShown = true
+    gGame.shownCount++
+    if (currCell.minesAroundCount) {
+        const strHTML = `<span class="color-${currCell.minesAroundCount}">${currCell.minesAroundCount}</span>`
+        renderCell({ i: nextI, j: nextJ }, strHTML, currCell.isShown)
+    } else {
+        renderCell({ i: nextI, j: nextJ }, null, currCell.isShown)
+        // If there aren't any mines nearby, keep looking for closed cells 
+        expandShown(board, nextI, nextJ)
+    }
+}
+
+function countNeighbors(cellI, cellJ, mat) {
+    var neighborsCount = 0
+    for (var i = cellI - 1; i <= cellI + 1; i++) {
+        if (i < 0 || i >= mat.length) continue
+
+        for (var j = cellJ - 1; j <= cellJ + 1; j++) {
+            if (i === cellI && j === cellJ) continue
+            if (j < 0 || j >= mat[i].length) continue
+
+            if (mat[i][j].isMine) neighborsCount++
+        }
+    }
+    return neighborsCount
+}
+
+function toggleNeighbors({ i, j }) {
+    var state = null
+    for (var nextI = i - 1; nextI <= i + 1; nextI++) {
+        if (nextI < 0 || nextI >= gBoard.length) continue
+        for (var nextJ = j - 1; nextJ <= j + 1; nextJ++) {
+            if (nextJ < 0 || nextJ >= gBoard[nextI].length) continue
+            const currCell = gBoard[nextI][nextJ]
+            if (currCell.isMarked) continue
+            if (currCell.isShown) continue
+            if (gIsHint) {
+                if (currCell.minesAroundCount) state = currCell.minesAroundCount
+                if (currCell.isMine) state = MINE_IMG
+            }
+            renderCell({ i: nextI, j: nextJ }, state, gIsHint)
+            state = null
+        }
+    }
+}

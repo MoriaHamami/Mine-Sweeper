@@ -1,77 +1,105 @@
 'use strict'
 
-const MINE = '&#x1F4A3'
 const FLAG = '🚩'
 const MINE_IMG = '<img src="img/mine.png">'
 const WRONG_MINE_IMG = '<img src="img/wrongMine.png">'
 const WON = '😁'
 const LOST = '😖'
 const NORMAL = '😊'
+const LIFE = '❤️'
+const HINT = '💡'
+const SAFE = '✅'
 
 var gBoard
-var gLevel
-var gIsFirstClick
-var gGame
 var gInterval
+var gIsFirstClick
+var gIsHint
+var gLevel = {
+    beginner: { SIZE: 4, MINES: 2 },
+    medium: { SIZE: 8, MINES: 14 },
+    expert: { SIZE: 12, MINES: 32 }
+}
+var gGame = {
+    isOn: true,
+    gameTime: { num: 0, str: '' },
+    shownCount: 0,
+    corrMarkedCount: 0,
+    lives: 3,
+    hints: 3,
+    safeClicks: 3,
+    currLevel: gLevel.beginner
+}
 
 function initGame() {
+    resetTimer()
+    gBoard = buildBoard()
+    renderBoard(gBoard, '.board-container')
 
-    gLevel = {
-        beginner: { SIZE: 4, MINES: 2 },
-        medium: { SIZE: 8, MINES: 14 },
-        expert: { SIZE: 12, MINES: 32 }
-    }
+    // Update best time of beginner level
+    const bestTime = localStorage.getItem(gGame.currLevel.SIZE)
+    const elBestTime = document.querySelector('.best-time span')
+    if (bestTime) elBestTime.innerText = bestTime
 
-    gGame = {
-        isOn: false,
-        shownCount: 0,
-        markedCount: 0,
-        currLevel: gLevel.beginner
-    }
-
-    restartVars()
+    gIsFirstClick = true
+    gIsHint = false
 }
 
 function restartVars() {
-    stopTimer()
+    resetTimer()
     gBoard = buildBoard()
     renderBoard(gBoard, '.board-container')
+
     gIsFirstClick = true
+    gIsHint = false
+    gGame.corrMarkedCount = 0
+    gGame.shownCount = 0
+    updateIcons(1, '.restart-btn', NORMAL)
+
+    gGame.lives = 3
+    gGame.safeClicks = 3
+    updateIcons(3, '.lives', LIFE)
+    updateIcons(3, '.hints', HINT)
+    updateIcons(3, '.safe-click', SAFE)
+
+    gGame.gameTime.num = 0
     gGame.isOn = true
 }
 
-function buildBoard() {
-    const size = gGame.currLevel.SIZE
-    const board = []
-    for (var i = 0; i < size; i++) {
-        board.push([])
-        for (var j = 0; j < size; j++) {
-            board[i][j] = {
-                minesAroundCount: 0,
-                isShown: false,
-                isMine: false,
-                isMarked: false
-            }
-        }
-
-    }
-    return board
+function changeLevel(level) {
+    gGame.currLevel = gLevel[level]
+    // Update best time per level
+    const bestTime = localStorage.getItem(gGame.currLevel.SIZE)
+    console.log('bestTime:', bestTime)
+    const elBestTime = document.querySelector('.best-time span')
+    if (bestTime) elBestTime.innerText = bestTime
+    else elBestTime.innerText = '00 : 00 : 00'
+    restartVars()
 }
 
-function cellClicked(elCell, i, j, ev) {
+function cellClicked(i, j, ev) {
     const currCell = gBoard[i][j]
 
+    if (!gGame.isOn) return
     // Don't mark the first cell
     if (gIsFirstClick && ev.button === 2) return
+    // Don't accept double-click
+    if (currCell.isShown) return
 
     // First cell clicked
-    if (gIsFirstClick) {
-        setMines(gBoard, { i, j })
-        setMinesNegsCount(gBoard)
-        startTimer()
-        currCell.isShown = true
-        renderCell({i, j},'', currCell.isShown)
-        gIsFirstClick = false
+    if (gIsFirstClick) updateFirstEncounter(i, j)
+
+    // This click is used with hint
+    if (gIsHint) {
+        toggleNeighbors({ i, j })
+        var intervalId = setTimeout(() => {
+            gIsHint = false
+            var elHints = document.querySelector('.hints')
+            toggleNeighbors({ i, j })
+            elHints.style.backgroundColor = ''
+            clearInterval(intervalId)
+        }, 1000)
+        gGame.hints--
+        updateIcons(gGame.hints, '.hints', HINT)
     }
 
     // Open cell according to encounter
@@ -79,12 +107,35 @@ function cellClicked(elCell, i, j, ev) {
         cellMarked({ i, j })
     } else if (currCell.isMine) {
         if (currCell.isMarked) return
-        showMine({ i, j })
+        if (gGame.lives) {
+            showMine({ i, j })
+            gGame.lives--
+            updateIcons(gGame.lives, '.lives', LIFE)
+            checkGameOver({ i, j })
+        }
     } else {
         if (currCell.isMarked) return
         showNearNegs({ i, j })
+        checkGameOver({ i, j })
     }
 
+}
+
+function showHint() {
+    if (gGame.hints === 0) return
+    gIsHint = true
+    var elHints = document.querySelector('.hints')
+    elHints.style.backgroundColor = 'rgba(216, 219, 168, 0.5)'
+}
+
+function updateFirstEncounter(i, j) {
+    const currCell = gBoard[i][j]
+    setMines(gBoard, { i, j })
+    setMinesNegsCount(gBoard)
+    startTimer()
+    currCell.isShown = true
+    renderCell({ i, j }, '', currCell.isShown)
+    gIsFirstClick = false
 }
 
 function setMines(board, currCell) {
@@ -111,78 +162,46 @@ function cellMarked(location) {
     const currCell = gBoard[location.i][location.j]
     if (currCell.isMarked) {
         currCell.isMarked = false
+        if (currCell.isMine) gGame.corrMarkedCount++
         renderCell(location, null, currCell.isShown)
+        checkGameOver({ i: location.i, j: location.j })
     } else {
         currCell.isMarked = true
+        if (currCell.isMine) gGame.corrMarkedCount++
         renderCell(location, FLAG, currCell.isShown)
     }
 }
 
 function showMine(location) {
-    gBoard[location.i][location.j].isShown = true
+    const currCell = gBoard[location.i][location.j]
+    currCell.isShown = true
+    gGame.shownCount++
     renderCell(location, MINE_IMG, true)
 }
 
-function showNearNegs(location) {
-    var currCell = gBoard[location.i][location.j]
-    if (currCell.minesAroundCount) { // If there is a number in cell
-        gBoard[location.i][location.j].isShown = true
-        const strHTML = `<span class="color-${currCell.minesAroundCount}">${currCell.minesAroundCount}</span>`
-        renderCell(location, strHTML, currCell.isShown)
-    } else { // If there is an empty cell
-        // Show current cell
-        currCell.isShown = true
-        renderCell(location, null, currCell.isShown)
-        // Check other cells
-        expandShown(gBoard, location.i, location.j)
-    }
-}
+function showSafeCell() {
 
-function expandShown(board, i, j) {
+    if(gIsFirstClick) return
 
-    for (var nextI = i - 1; nextI <= i + 1; nextI++) {
-        // Skip if cell is not on board
-        if (nextI < 0 || nextI >= board.length) continue
-        for (var nextJ = j - 1; nextJ <= j + 1; nextJ++) {
-            // Skip if the cell is not on board
-            if (nextJ < 0 || nextJ >= board[0].length) continue
-            // Skip if we checked this cell
-            if (nextI === i && nextJ === j) continue
+    const elSafeClick = document.querySelector('.safe-click')
+    elSafeClick.style.backgroundColor = 'rgba(216, 219, 168, 0.5)'
 
-            const currCell = gBoard[nextI][nextJ]
-            // Skip if this is a marked, or shown cell 
-            if (currCell.isMarked || currCell.isShown) continue
+    const location = getEmptyRandIdx()
+    const cellSelector = '.' + getClassName(location) // .cell-i-j
+    const elSafeCell = document.querySelector(cellSelector)
+    elSafeCell.style.backgroundColor = 'rgb(142, 124, 124)'
 
-            // If found a cell to open, reveal it
-            currCell.isShown = true
-            if (currCell.minesAroundCount) {
-                const strHTML = `<span class="color-${currCell.minesAroundCount}">${currCell.minesAroundCount}</span>`
-                renderCell({i: nextI, j: nextJ}, strHTML, currCell.isShown)
-            } else {
-                renderCell({i: nextI, j :nextJ}, null, currCell.isShown)
-                // If there aren't any mines nearby, keep looking for closed cells 
-                expandShown(board, nextI, nextJ)
-            }
-        }
-    }
+    // If there are no empty cells return
+    if (location) return
 
-}
+    var intervalId = setTimeout(() => {
+        elSafeCell.style.backgroundColor = 'rgb(171, 158, 158)'
+        elSafeClick.style.backgroundColor = ''
+        clearInterval(intervalId)
+    }, 2000)
+    gGame.safeClicks--
+    updateIcons(gGame.safeClicks, '.safe-click', SAFE)
 
-function changeLevel(level) {
-    gGame.currLevel = gLevel[level]
-    restartVars()
-    console.log('gGame.currLevel:', gGame.currLevel)
-}
-
-function checkGameOver() {
-    stopTimer()
-
-}
-
-function stopTimer() {
-    clearInterval(gInterval)
-    var elTimer = document.querySelector('.timer span')
-    elTimer.innerText = '00 : 00 : 00'
 }
 
 

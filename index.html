@@ -11,28 +11,41 @@
 
 <body onload="initGame()">
 
-    <div class="header">
-        <div class=" score">
-            <h2>Mine Sweeper</h2>
-        </div>
+    <div class="container">
+
+        <h2>Mine Sweeper</h2>
+        <button class="restart-btn" onclick="restartVars()">😊</button>
         <div class="timer">
-            Timer:
+            TIMER:
             <span>00 : 00 : 00</span>
         </div>
-        <button onclick="initGame()">😊</button>
+        <div class="best-time">
+            BEST TIME:
+            <span>00 : 00 : 00</span>
+        </div>
         <div class="levels">
             <button onclick="changeLevel('beginner')">Beginner</button>
             <button onclick="changeLevel('medium')">Medium</button>
             <button onclick="changeLevel('expert')">Expert</button>
         </div>
-    </div>
+        <div class="board-container">
+        </div>
 
-    <div class="board-container">
+        <div class="bottom-icons">
+            <span>LIVES: </span>
+            <div class="lives">❤️❤️❤️</div>
+            <span>SAFE CLICK: </span>
+            <div onclick="showSafeCell()" class="safe-click">✅✅✅</div>
+            <span>HINTS: </span>
+            <div onclick="showHint()" class="hints">💡💡💡</div>
+        </div>
     </div>
+    <div class="footer">©️ Moria Hamami</div>
 
     <script src="js/utils.js"></script>
-    <!-- <script src="js/pacman.js"></script>
-    <script src="js/ghost.js"></script> -->
+    <script src="js/timer.js"></script>
+    <script src="js/neighbors.js"></script>
+    <script src="js/gameOver.js"></script>
     <script src="js/main.js"></script>
 </body>
 
