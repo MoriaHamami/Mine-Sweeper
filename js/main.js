@@ -156,11 +156,11 @@ function cellMarked(location) {
         currCell.isMarked = false
         if (currCell.isMine) gGame.corrMarkedCount++
         renderCell(location, null, currCell.isShown)
-        checkGameOver({ i: location.i, j: location.j })
     } else {
         currCell.isMarked = true
         if (currCell.isMine) gGame.corrMarkedCount++
         renderCell(location, FLAG, currCell.isShown)
+        checkGameOver({ i: location.i, j: location.j })
     }
 }
 
