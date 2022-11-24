@@ -63,6 +63,7 @@ function restartVars() {
 
     gGame.lives = 3
     gGame.safeClicks = 3
+    gGame.hints = 3
     gGame.megaHint = 1
     updateIcons(3, '.lives', LIFE)
     updateIcons(3, '.hints', HINT)

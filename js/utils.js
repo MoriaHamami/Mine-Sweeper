@@ -52,16 +52,6 @@ function getClassName(location) {
     return cellClass
 }
 
-function revealFirstEncounter(i, j) {
-    const currCell = gBoard[i][j]
-    setMines(gBoard, { i, j })
-    setMinesNegsCount(gBoard)
-    startTimer()
-    currCell.isShown = true
-    renderCell({ i, j }, '', currCell.isShown)
-    gIsFirstClick = false
-}
-
 function getEmptyRandCells(amount, board, currLocation) {
     const emptyCells = []
 

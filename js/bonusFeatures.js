@@ -17,12 +17,14 @@ function showSafeCell(elBtn) {
     elBtn.style.backgroundColor = 'rgba(216, 219, 168, 0.5)'
 
     const location = getEmptyRandIdx()
+
+    // If there are no empty cells return
+    if (location === null) return elBtn.style.backgroundColor = ''
+
     const cellSelector = '.' + getClassName(location) // .cell-i-j
     const elSafeCell = document.querySelector(cellSelector)
     elSafeCell.style.backgroundColor = 'rgb(237, 146, 146)'
 
-    // If there are no empty cells return
-    if (location === null) return
 
     var intervalId = setTimeout(() => {
         elSafeCell.style.backgroundColor = 'rgb(171, 158, 158)'
