@@ -86,13 +86,15 @@ function toggleNeighbors({ i, j }) {
         for (var nextJ = j - 1; nextJ <= j + 1; nextJ++) {
             if (nextJ < 0 || nextJ >= gBoard[nextI].length) continue
             const currCell = gBoard[nextI][nextJ]
-            if (currCell.isMarked) continue
             if (currCell.isShown) continue
             if (gIsHint) {
-                if (currCell.minesAroundCount) state = currCell.minesAroundCount
+                if (currCell.minesAroundCount) {
+                    state = `<span class="color-${currCell.minesAroundCount}">${currCell.minesAroundCount}</span>`
+                }
                 if (currCell.isMine) state = MINE_IMG
             }
             renderCell({ i: nextI, j: nextJ }, state, gIsHint)
+            if (currCell.isMarked && !gIsHint) renderCell({ i: nextI, j: nextJ }, FLAG, false)
             state = null
         }
     }

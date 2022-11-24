@@ -1,0 +1,33 @@
+body {
+  background-image: url("../img/bg.jpg");
+  background-size: cover;
+  color: rgb(174, 204, 222);
+  text-align: center;
+  position: relative;
+  min-height: 128vh;
+}
+
+.container {
+  background-color: rgba(38, 70, 98, 0.5);
+  border-radius: 7px;
+  margin: auto;
+  margin-top: 30px;
+  display: block;
+  padding: 5%;
+  padding-top: 10px;
+  width: 70%;
+  height: 70%;
+}
+
+h2 {
+  font-size: 43px;
+  color: rgb(29, 69, 85);
+  margin-bottom: 17px;
+  text-shadow: 0px 2px 2px #b6daec;
+
+}
+
+img {
+  vertical-align: bottom;
+  width: 30px;
+}

@@ -1,0 +1,56 @@
+table {
+    margin: auto;
+    border-radius: 5px;
+    border: none;
+}
+
+.cell {
+    box-shadow: 7px 6px 9px 0px #000000bd;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    border-color: black;
+    font-style: bold;
+    font-size: 1.2em;
+    background-color: rgb(171, 158, 158);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.cell:hover {
+    background-color: rgb(142, 124, 124);
+}
+
+
+.color-1 {
+    color: rgb(6, 6, 234);
+}
+
+.color-2 {
+    color: rgb(15, 112, 15);
+}
+
+.color-3 {
+    color: rgb(147, 26, 26);
+}
+
+.color-4 {
+    color: darkblue;
+}
+
+.color-5 {
+    color: purple;
+}
+
+.color-6 {
+    color: rgb(39, 143, 136);
+}
+
+.color-7 {
+    color: blue;
+}
+
+.color-8 {
+    color: blue;
+}

@@ -1,0 +1,70 @@
+.board-container+.msg {
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 19px;
+    color: rgb(8, 33, 54);
+    border-radius: 6px;
+    padding: 4px;
+    cursor: pointer;
+    background-color: rgba(131, 162, 190, 0.5);
+}
+
+.board-container+.msg:hover {
+    background-color: rgba(176, 195, 211, 0.5);
+}
+
+.lives,
+.hints,
+.safe-click {
+    display: inline-block;
+    margin: 7px 7px;
+    height: 29px;
+}
+
+.hints,
+.safe-click {
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 7px;
+}
+
+.hints:hover {
+
+    background-color: rgba(216, 219, 168, 0.5);
+    border-radius: 7px;
+}
+
+.safe-click:hover {
+    background-color: rgba(216, 219, 168, 0.5);
+    border-radius: 7px;
+}
+
+.lives {
+    font-size: 19px;
+}
+
+.timer {
+    font-size: 20px;
+    padding: 10px;
+}
+
+.best-time {
+    margin-bottom: 7px;
+    font-size: 15px;
+}
+
+.features {
+    margin-top: 15px;
+}
+
+.safe-click:hover {
+    cursor: pointer;
+}
+
+.footer {
+    font-size: 15px;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    position: absolute;
+}

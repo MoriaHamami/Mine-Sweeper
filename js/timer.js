@@ -42,13 +42,13 @@ function updateBestTime() {
     if (bestTime === 0 || bestTime >= gGame.gameTime.num) {
         localStorage.setItem(gGame.currLevel.SIZE, gGame.gameTime.str)
         const elBestTime = document.querySelector('.best-time span')
-        elBestTime.innerText = gGame.gameTime.str 
+        elBestTime.innerText = gGame.gameTime.str
     }
 }
 
-function getBestTimeInNum(){
+function getBestTimeInNum() {
     const time = localStorage.getItem(gGame.currLevel.SIZE)
-    if(!time) return 0
+    if (!time) return 0
     var parts = time.split(' : ')
     const timeInSecs = +parts[0] + +parts[1] * 60 + +parts[2] * 60 * 60
     return timeInSecs

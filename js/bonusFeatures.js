@@ -4,9 +4,11 @@ const HINT = '💡'
 const SAFE = '✅'
 
 var gIsHint
+var gIsMegaHint
 var gIsPuttingMines
 var gMineLocations
 var gMinesCount
+var gCellsToReveal
 
 function showSafeCell(elBtn) {
 
@@ -163,4 +165,66 @@ function hideAllMines() {
     }
 }
 
+function megaHint(elBtn) {
+
+    if (gIsFirstClick) return
+    if (!gGame.megaHint) return
+    gIsMegaHint = 2
+    elBtn.style.backgroundColor = 'rgb(142, 124, 124)'
+
+}
+
+function revealMegaHint(i, j) {
+    if (gIsMegaHint === 2) { // If this is the first click
+        renderCell({ i, j }, null, true)
+        gCellsToReveal.push({ i, j })
+    } else {
+        gCellsToReveal.push({ i, j })
+        toggleArea()
+        var intervalId = setTimeout(() => {
+            var elMegaHint = document.querySelector('.mega-hint')
+            elMegaHint.style.backgroundColor = ''
+            gGame.megaHint = 0
+            toggleArea()
+            gCellsToReveal = []
+            clearInterval(intervalId)
+        }, 2000)
+    }
+}
+
+function toggleArea() {
+
+    const startI = gCellsToReveal[0].i
+    const startJ = gCellsToReveal[0].j
+    const endI = gCellsToReveal[1].i
+    const endJ = gCellsToReveal[1].j
+    // If marked wrong, don't reveal
+    if ((startI >= endI || startJ >= endJ) && gGame.megaHint !== 0) return
+    // If marked wrong, get another mega hint and hide chosen cells
+    if ((startI >= endI || startJ >= endJ) && gGame.megaHint === 0) {
+        renderCell({ i: startI, j: startJ }, null, false)
+        renderCell({ i: endI, j: endJ }, null, false)
+        gGame.megaHint = 1
+        return
+    }
+
+    var state = null
+    for (var i = startI; i <= endI; i++) {
+        for (var j = startJ; j <= endJ; j++) {
+            const toReveal = gGame.megaHint ? true : false
+            const currCell = gBoard[i][j]
+            if (currCell.isShown) continue
+            if (toReveal) {
+                if (currCell.minesAroundCount) {
+                    state = `<span class="color-${currCell.minesAroundCount}">${currCell.minesAroundCount}</span>`
+                }
+                if (currCell.isMine) state = MINE_IMG
+            }
+            renderCell({ i, j }, state, toReveal)
+            if (currCell.isMarked && !toReveal) renderCell({ i, j }, FLAG, false)
+            state = null
+        }
+
+    }
+}
 

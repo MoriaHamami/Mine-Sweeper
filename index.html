@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Mine Sweeper</title>
-    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/table.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/bottomFeatures.css">
 </head>
 
 <body onload="initGame()">
@@ -37,7 +40,7 @@
         <div onclick="minesPlaced(this)" class="msg" hidden>Click here after placing the mines</div>
         
         <div class="features">
-            <button class="mega-hint" onclick="megaHint()">Mega Hint</button>
+            <button class="mega-hint" onclick="megaHint(this)">Mega Hint</button>
             <button class="boom" onclick="boom(this)">7 BOOM</button>
             <button class="manual" onclick="manual(this)">Manual</button>
         </div>

@@ -43,8 +43,9 @@ function initGame() {
     gIsFirstClick = true
     gIsHint = false
     gIsPuttingMines = false
-    gMinesCount=0
+    gMinesCount = 0
     gMineLocations = []
+    gCellsToReveal = []
 }
 
 function restartVars() {
@@ -56,19 +57,20 @@ function restartVars() {
     gIsHint = false
     gGame.corrMarkedCount = 0
     gGame.shownCount = 0
-    gMinesCount=0
-    console.log('gMinesCount:', gMinesCount)
+    gMinesCount = 0
+    gIsMegaHint = 0
     updateIcons(1, '.restart-btn', NORMAL)
 
     gGame.lives = 3
     gGame.safeClicks = 3
+    gGame.megaHint = 1
     updateIcons(3, '.lives', LIFE)
     updateIcons(3, '.hints', HINT)
     updateIcons(3, '.safe-click', SAFE)
 
     gGame.gameTime.num = 0
     gGame.isOn = true
-    if(gGame.isManual) {
+    if (gGame.isManual) {
         document.querySelector('.msg').hidden = false
         gIsPuttingMines = true
     }
@@ -78,7 +80,6 @@ function changeLevel(level) {
     gGame.currLevel = gLevel[level]
     // Update best time per level
     const bestTime = localStorage.getItem(gGame.currLevel.SIZE)
-    console.log('bestTime:', bestTime)
     const elBestTime = document.querySelector('.best-time span')
     if (bestTime) elBestTime.innerText = bestTime
     else elBestTime.innerText = '00 : 00 : 00'
@@ -101,7 +102,15 @@ function cellClicked(i, j, ev) {
     if (gIsFirstClick) revealFirstEncounter(i, j)
 
     // This click is used with hint
-    if (gIsHint) revealHint(i, j)
+    if (gIsHint) return revealHint(i, j)
+
+    // This click is used with mega hint
+    if (gIsMegaHint) {
+        revealMegaHint(i, j)
+        gIsMegaHint--
+        return
+    }
+
     // Open cell according to encounter
     if (ev.button === 2) {
         cellMarked({ i, j })

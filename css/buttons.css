@@ -1,0 +1,70 @@
+button:not(.dark-mode,
+    .restart-btn,
+    .undo, .manual,
+    .boom,
+    .mega-hint) {
+    background-color: rgb(199, 194, 194);
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-color: rgb(168, 165, 165);
+    border-radius: 5px;
+    box-shadow: 4px 3px 7px 0px #000000bd;
+    margin: 7px;
+    margin-bottom: 16px;
+    color: rgb(12, 75, 111);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: rgb(142, 124, 124);
+}
+
+.restart-btn {
+    font-size: 25px;
+    padding: 4px;
+    border-radius: 50%;
+}
+
+.dark-mode,
+.restart-btn,
+.undo {
+    display: inline;
+    margin: 7px;
+    margin-bottom: 10px;
+    border-color: rgb(112, 106, 106);
+    box-shadow: 4px 3px 7px 0px #000000bd;
+    background-color: rgb(193, 188, 188);
+    cursor: pointer;
+
+}
+
+.dark-mode,
+.undo {
+    font-size: 20px;
+    padding: 0px;
+    border-radius: 5px;
+}
+
+.dark-mode:hover,
+.undo:hover {
+    cursor: not-allowed;
+}
+
+.manual,
+.boom,
+.mega-hint {
+    background-color: rgb(199, 194, 194);
+    padding: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    border-color: rgb(168, 165, 165);
+    border-radius: 5px;
+    box-shadow: 4px 3px 7px 0px #000000bd;
+    margin: 7px;
+    margin-bottom: 16px;
+    color: rgb(9, 61, 91);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: bold;
+}
