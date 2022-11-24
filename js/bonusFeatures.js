@@ -24,11 +24,13 @@ function showSafeCell(elBtn) {
     const cellSelector = '.' + getClassName(location) // .cell-i-j
     const elSafeCell = document.querySelector(cellSelector)
     elSafeCell.style.backgroundColor = 'rgb(237, 146, 146)'
+    if (gGame.safeClicks === 1) elBtn.style.backgroundColor = ''
 
-
+    gIsProcessing = true
     var intervalId = setTimeout(() => {
         elSafeCell.style.backgroundColor = 'rgb(171, 158, 158)'
         elBtn.style.backgroundColor = ''
+        gIsProcessing = false
         clearInterval(intervalId)
     }, 2000)
     gGame.safeClicks--
@@ -37,18 +39,21 @@ function showSafeCell(elBtn) {
 }
 
 function useHint(elBtn) {
-    if (gGame.hints === 0) return
+    if (gGame.hints === 0 || gIsFirstClick) return
     elBtn.style.backgroundColor = 'rgba(216, 219, 168, 0.5)'
     gIsHint = true
 }
 
 function revealHint(i, j) {
     toggleNeighbors({ i, j })
+    var elHints = document.querySelector('.hints')
+    if (gGame.hints === 1) elHints.style.backgroundColor = ''
+    gIsProcessing = true
     var intervalId = setTimeout(() => {
         gIsHint = false
-        var elHints = document.querySelector('.hints')
         elHints.style.backgroundColor = ''
         toggleNeighbors({ i, j })
+        gIsProcessing = false
         clearInterval(intervalId)
     }, 1000)
     gGame.hints--
@@ -183,12 +188,14 @@ function revealMegaHint(i, j) {
     } else {
         gCellsToReveal.push({ i, j })
         toggleArea()
+        gIsProcessing = true
         var intervalId = setTimeout(() => {
             var elMegaHint = document.querySelector('.mega-hint')
             elMegaHint.style.backgroundColor = ''
             gGame.megaHint = 0
             toggleArea()
             gCellsToReveal = []
+            gIsProcessing = false
             clearInterval(intervalId)
         }, 2000)
     }

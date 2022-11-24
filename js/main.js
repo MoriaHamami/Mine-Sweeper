@@ -10,6 +10,7 @@ const LIFE = '❤️'
 
 var gBoard
 var gIsFirstClick
+var gIsProcessing
 var gLevel = {
     beginner: { SIZE: 4, MINES: 2 },
     medium: { SIZE: 8, MINES: 14 },
@@ -40,6 +41,7 @@ function initGame() {
     const elBestTime = document.querySelector('.best-time span')
     if (bestTime) elBestTime.innerText = bestTime
 
+    gIsProcessing = false
     gIsFirstClick = true
     gIsHint = false
     gIsPuttingMines = false
@@ -91,6 +93,8 @@ function cellClicked(i, j, ev) {
     const currCell = gBoard[i][j]
 
     if (!gGame.isOn) return
+    // Don't let user click cell if there is an interval running
+    if(gIsProcessing) return
     // Don't mark the first cell
     if (gIsFirstClick && ev.button === 2) return
     // Don't accept double-click 
