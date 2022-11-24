@@ -14,7 +14,11 @@
     <div class="container">
 
         <h2>Mine Sweeper</h2>
-        <button class="restart-btn" onclick="restartVars()">😊</button>
+        <!-- <div class="header"> -->
+            <button class="dark-mode" onclick="darkMode()">🌑</button>
+            <button class="restart-btn" onclick="restartVars()">😊</button>
+            <button class="undo" onclick="undo()">↩️</button>
+        <!-- </div> -->
         <div class="timer">
             TIMER:
             <span>00 : 00 : 00</span>
@@ -30,14 +34,21 @@
         </div>
         <div class="board-container">
         </div>
+        <div onclick="minesPlaced(this)" class="msg" hidden>Click here after placing the mines</div>
+        
+        <div class="features">
+            <button class="mega-hint" onclick="megaHint()">Mega Hint</button>
+            <button class="boom" onclick="boom(this)">7 BOOM</button>
+            <button class="manual" onclick="manual(this)">Manual</button>
+        </div>
 
         <div class="bottom-icons">
             <span>LIVES: </span>
             <div class="lives">❤️❤️❤️</div>
             <span>SAFE CLICK: </span>
-            <div onclick="showSafeCell()" class="safe-click">✅✅✅</div>
+            <div onclick="showSafeCell(this)" class="safe-click">✅✅✅</div>
             <span>HINTS: </span>
-            <div onclick="showHint()" class="hints">💡💡💡</div>
+            <div onclick="useHint(this)" class="hints">💡💡💡</div>
         </div>
     </div>
     <div class="footer">©️ Moria Hamami</div>
@@ -46,6 +57,7 @@
     <script src="js/timer.js"></script>
     <script src="js/neighbors.js"></script>
     <script src="js/gameOver.js"></script>
+    <script src="js/bonusFeatures.js"></script>
     <script src="js/main.js"></script>
 </body>
 

@@ -1,6 +1,7 @@
 'use strict'
 
 function buildBoard() {
+    if(gGame.is7Boom) return get7BoomBoard()
     const size = gGame.currLevel.SIZE
     const board = []
     for (var i = 0; i < size; i++) {
@@ -51,7 +52,7 @@ function getClassName(location) {
     return cellClass
 }
 
-function updateFirstEncounter(i, j) {
+function revealFirstEncounter(i, j) {
     const currCell = gBoard[i][j]
     setMines(gBoard, { i, j })
     setMinesNegsCount(gBoard)
@@ -114,6 +115,7 @@ function getEmptyRandIdx() {
             if (!currCell.isShown && !currCell.isMine) emptyCells.push({ i, j })
         }
     }
+    if(!emptyCells.length) return null
     const randIdx = getRandomInt(0, emptyCells.length)
     return emptyCells[randIdx]
 }

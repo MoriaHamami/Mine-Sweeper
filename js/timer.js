@@ -1,5 +1,7 @@
 'use strict'
 
+var gInterval
+
 function startTimer() {
     var elTimer = document.querySelector('.timer span')
     var seconds = 0
@@ -37,7 +39,7 @@ function resetTimer() {
 
 function updateBestTime() {
     const bestTime = getBestTimeInNum()
-    if (bestTime === 0 || bestTime <= gGame.gameTime.num) {
+    if (bestTime === 0 || bestTime >= gGame.gameTime.num) {
         localStorage.setItem(gGame.currLevel.SIZE, gGame.gameTime.str)
         const elBestTime = document.querySelector('.best-time span')
         elBestTime.innerText = gGame.gameTime.str 

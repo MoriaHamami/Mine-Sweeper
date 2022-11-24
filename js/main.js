@@ -7,13 +7,9 @@ const WON = '😁'
 const LOST = '😖'
 const NORMAL = '😊'
 const LIFE = '❤️'
-const HINT = '💡'
-const SAFE = '✅'
 
 var gBoard
-var gInterval
 var gIsFirstClick
-var gIsHint
 var gLevel = {
     beginner: { SIZE: 4, MINES: 2 },
     medium: { SIZE: 8, MINES: 14 },
@@ -21,12 +17,16 @@ var gLevel = {
 }
 var gGame = {
     isOn: true,
+    isDark: false,
+    is7Boom: false,
+    isManual: false,
     gameTime: { num: 0, str: '' },
     shownCount: 0,
     corrMarkedCount: 0,
     lives: 3,
     hints: 3,
     safeClicks: 3,
+    megaHint: 1,
     currLevel: gLevel.beginner
 }
 
@@ -42,6 +42,8 @@ function initGame() {
 
     gIsFirstClick = true
     gIsHint = false
+    gIsPuttingMines = false
+    gMineLocations = []
 }
 
 function restartVars() {
@@ -63,6 +65,10 @@ function restartVars() {
 
     gGame.gameTime.num = 0
     gGame.isOn = true
+    if(gGame.isManual) {
+        document.querySelector('.msg').hidden = false
+        gIsPuttingMines = true
+    }
 }
 
 function changeLevel(level) {
@@ -82,26 +88,17 @@ function cellClicked(i, j, ev) {
     if (!gGame.isOn) return
     // Don't mark the first cell
     if (gIsFirstClick && ev.button === 2) return
-    // Don't accept double-click
-    if (currCell.isShown) return
+    // Don't accept double-click 
+    if (currCell.isShown && !gIsPuttingMines) return
+
+    // For manual mode
+    if (gIsPuttingMines) return letUserPutMines(i, j)
 
     // First cell clicked
-    if (gIsFirstClick) updateFirstEncounter(i, j)
+    if (gIsFirstClick) revealFirstEncounter(i, j)
 
     // This click is used with hint
-    if (gIsHint) {
-        toggleNeighbors({ i, j })
-        var intervalId = setTimeout(() => {
-            gIsHint = false
-            var elHints = document.querySelector('.hints')
-            toggleNeighbors({ i, j })
-            elHints.style.backgroundColor = ''
-            clearInterval(intervalId)
-        }, 1000)
-        gGame.hints--
-        updateIcons(gGame.hints, '.hints', HINT)
-    }
-
+    if (gIsHint) revealHint(i, j)
     // Open cell according to encounter
     if (ev.button === 2) {
         cellMarked({ i, j })
@@ -121,16 +118,9 @@ function cellClicked(i, j, ev) {
 
 }
 
-function showHint() {
-    if (gGame.hints === 0) return
-    gIsHint = true
-    var elHints = document.querySelector('.hints')
-    elHints.style.backgroundColor = 'rgba(216, 219, 168, 0.5)'
-}
-
-function updateFirstEncounter(i, j) {
+function revealFirstEncounter(i, j) {
     const currCell = gBoard[i][j]
-    setMines(gBoard, { i, j })
+    if (!gGame.is7Boom && !gGame.isManual) setMines(gBoard, { i, j })
     setMinesNegsCount(gBoard)
     startTimer()
     currCell.isShown = true
@@ -144,17 +134,6 @@ function setMines(board, currCell) {
     for (var i = 0; i < emptyIdxs.length; i++) {
         const currIdx = emptyIdxs[i]
         board[currIdx.i][currIdx.j].isMine = true
-    }
-}
-
-function setMinesNegsCount(gBoard) {
-    for (var i = 0; i < gBoard.length; i++) {
-        for (var j = 0; j < gBoard[0].length; j++) {
-            var currCell = gBoard[i][j]
-            if (!(currCell.isMine)) {
-                currCell.minesAroundCount = countNeighbors(i, j, gBoard)
-            }
-        }
     }
 }
 
@@ -178,30 +157,3 @@ function showMine(location) {
     gGame.shownCount++
     renderCell(location, MINE_IMG, true)
 }
-
-function showSafeCell() {
-
-    if(gIsFirstClick) return
-
-    const elSafeClick = document.querySelector('.safe-click')
-    elSafeClick.style.backgroundColor = 'rgba(216, 219, 168, 0.5)'
-
-    const location = getEmptyRandIdx()
-    const cellSelector = '.' + getClassName(location) // .cell-i-j
-    const elSafeCell = document.querySelector(cellSelector)
-    elSafeCell.style.backgroundColor = 'rgb(142, 124, 124)'
-
-    // If there are no empty cells return
-    if (location) return
-
-    var intervalId = setTimeout(() => {
-        elSafeCell.style.backgroundColor = 'rgb(171, 158, 158)'
-        elSafeClick.style.backgroundColor = ''
-        clearInterval(intervalId)
-    }, 2000)
-    gGame.safeClicks--
-    updateIcons(gGame.safeClicks, '.safe-click', SAFE)
-
-}
-
-

@@ -1,5 +1,16 @@
 'use strict'
 
+function setMinesNegsCount(gBoard) {
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[0].length; j++) {
+            var currCell = gBoard[i][j]
+            if (!(currCell.isMine)) {
+                currCell.minesAroundCount = countNeighbors(i, j, gBoard)
+            }
+        }
+    }
+}
+
 function showNearNegs(location) {
     const currCell = gBoard[location.i][location.j]
     if (currCell.minesAroundCount) { // If there is a number in cell
