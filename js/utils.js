@@ -21,14 +21,17 @@ function buildBoard() {
 function renderBoard(mat, selector) {
 
     var strHTML = '<table border="1"><tbody>'
+    var darkModeClass = ''
+
     for (var i = 0; i < mat.length; i++) {
 
         strHTML += '<tr>'
         for (var j = 0; j < mat[0].length; j++) {
 
             const className = `cell cell-${i}-${j}`
+            if(gGame.isDark) darkModeClass='dark'
 
-            strHTML += `<td oncontextmenu="return false;" onmouseup="cellClicked(${i}, ${j}, event)" class="${className}"></td>`
+            strHTML += `<td oncontextmenu="return false;" onmouseup="cellClicked(${i}, ${j}, event)" class="${className} ${darkModeClass}"></td>`
         }
         strHTML += '</tr>'
     }
@@ -41,9 +44,11 @@ function renderBoard(mat, selector) {
 function renderCell(location, value, isShown) {
     const elCell = document.querySelector(`.cell-${location.i}-${location.j}`)
     elCell.innerHTML = value
-    if (isShown) elCell.style.backgroundColor = 'rgb(142, 124, 124)'
-    else elCell.style.backgroundColor = 'rgb(171, 158, 158)'
-
+    if (isShown) {
+        elCell.style.backgroundColor = 'rgb(142, 124, 124)'
+    } else {
+        elCell.style.backgroundColor = ''
+    }
 }
 
 // Returns the class name for a specific cell
@@ -59,8 +64,10 @@ function getEmptyRandCells(amount, board, currLocation) {
     const idxOptions = Array.from(Array(boardSize).keys())
 
     //Remove current idx from array of options
-    const currIdx = currLocation.i * board[0].length + currLocation.j
-    idxOptions.splice(currIdx, 1)
+    if(currLocation) {
+        const currIdx = currLocation.i * board[0].length + currLocation.j
+        idxOptions.splice(currIdx, 1)
+    }
 
     for (var i = 0; i < amount; i++) {
         const idx = getRandomItem(idxOptions)

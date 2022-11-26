@@ -28,13 +28,12 @@
     border-radius: 7px;
 }
 
-.hints:hover {
-
+.hints:hover:not(.done) {
     background-color: rgba(216, 219, 168, 0.5);
     border-radius: 7px;
 }
 
-.safe-click:hover {
+.safe-click:hover:not(.done) {
     background-color: rgba(216, 219, 168, 0.5);
     border-radius: 7px;
 }

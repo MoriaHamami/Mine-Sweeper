@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Mine Sweeper</title>
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/darkMode.css">
     <link rel="stylesheet" href="css/table.css">
     <link rel="stylesheet" href="css/buttons.css">
     <link rel="stylesheet" href="css/bottomFeatures.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body onload="initGame()">
@@ -17,9 +18,9 @@
     <div class="container">
 
         <h2>Mine Sweeper</h2>
-            <button class="dark-mode" onclick="darkMode()">🌑</button>
+            <button class="dark-mode" onclick="darkMode(this)">🌑</button>
             <button class="restart-btn" onclick="restartVars()">😊</button>
-            <button class="undo" onclick="undo()">↩️</button>
+            <button class="undo" onclick="undo(this)">↩️</button>
         <div class="timer">
             TIMER:
             <span>00 : 00 : 00</span>
@@ -29,9 +30,9 @@
             <span>00 : 00 : 00</span>
         </div>
         <div class="levels">
-            <button onclick="changeLevel('beginner')">Beginner</button>
-            <button onclick="changeLevel('medium')">Medium</button>
-            <button onclick="changeLevel('expert')">Expert</button>
+            <button class="beginner" onclick="changeLevel('beginner', this)">Beginner</button>
+            <button class="medium" onclick="changeLevel('medium', this)">Medium</button>
+            <button class="expert" onclick="changeLevel('expert', this)">Expert</button>
         </div>
         <div class="board-container">
         </div>
@@ -39,6 +40,7 @@
         
         <div class="features">
             <button class="mega-hint" onclick="megaHint(this)">Mega Hint</button>
+            <button class="exterminator" onclick="exterminator(this)">Exterminator</button>
             <button class="boom" onclick="boom(this)">7 BOOM</button>
             <button class="manual" onclick="manual(this)">Manual</button>
         </div>
@@ -47,9 +49,9 @@
             <span>LIVES: </span>
             <div class="lives">❤️❤️❤️</div>
             <span>SAFE CLICK: </span>
-            <div onclick="showSafeCell(this)" class="safe-click">✅✅✅</div>
+            <div class="safe-click" onclick="showSafeCell(this)">✅✅✅</div>
             <span>HINTS: </span>
-            <div onclick="useHint(this)" class="hints">💡💡💡</div>
+            <div class="hints" onclick="useHint(this)">💡💡💡</div>
         </div>
     </div>
     <div class="footer">©️ Moria Hamami</div>

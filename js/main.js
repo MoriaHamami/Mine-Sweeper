@@ -11,8 +11,9 @@ const LIFE = '❤️'
 var gBoard
 var gIsFirstClick
 var gIsProcessing
+var gPrevLevel
 var gLevel = {
-    beginner: { SIZE: 4, MINES: 2 },
+    beginner: { SIZE: 4, MINES: 3 },
     medium: { SIZE: 8, MINES: 14 },
     expert: { SIZE: 12, MINES: 32 }
 }
@@ -28,6 +29,7 @@ var gGame = {
     hints: 3,
     safeClicks: 3,
     megaHint: 1,
+    exterminator: 1,
     currLevel: gLevel.beginner
 }
 
@@ -41,25 +43,42 @@ function initGame() {
     const elBestTime = document.querySelector('.best-time span')
     if (bestTime) elBestTime.innerText = bestTime
 
+    const elBtn = document.querySelector(`.beginner`)
+    elBtn.style.backgroundColor = 'rgb(142, 124, 124)'
+
+    gPrevLevel = 'beginner'
     gIsProcessing = false
     gIsFirstClick = true
     gIsHint = false
     gIsPuttingMines = false
-    gMinesCount = 0
     gMineLocations = []
     gCellsToReveal = []
 }
 
 function restartVars() {
+
+    if(gIsProcessing) return
+    
     resetTimer()
     gBoard = buildBoard()
     renderBoard(gBoard, '.board-container')
+
+    // If player was in the middle of a hint or mega hint, turn off
+    const elMegaHint = document.querySelector('.mega-hint')
+    if (gIsMegaHint === 2) {
+        elMegaHint.style.backgroundColor = ''
+        gIsMegaHint = 0
+    }
+    const elHint = document.querySelector('.hints')
+    if (gIsHint && !gIsProcessing) {
+        elHint.style.backgroundColor = ''
+        gIsHint = false
+    }
 
     gIsFirstClick = true
     gIsHint = false
     gGame.corrMarkedCount = 0
     gGame.shownCount = 0
-    gMinesCount = 0
     gIsMegaHint = 0
     updateIcons(1, '.restart-btn', NORMAL)
 
@@ -67,9 +86,15 @@ function restartVars() {
     gGame.safeClicks = 3
     gGame.hints = 3
     gGame.megaHint = 1
+    gGame.exterminator = 1
     updateIcons(3, '.lives', LIFE)
     updateIcons(3, '.hints', HINT)
     updateIcons(3, '.safe-click', SAFE)
+
+    const elHints = document.querySelector('.hints')
+    const elSafeClicks= document.querySelector('.safe-click')
+    elHint.classList.remove('done')
+    elSafeClicks.classList.remove('done')
 
     gGame.gameTime.num = 0
     gGame.isOn = true
@@ -79,22 +104,34 @@ function restartVars() {
     }
 }
 
-function changeLevel(level) {
+function changeLevel(level, elBtn) {
+
+    if(gIsProcessing) return
+
+    // Update level
     gGame.currLevel = gLevel[level]
+
+    //Change button marked as selected
+    if (level !== gPrevLevel) {
+        const elPrevLevel = document.querySelector(`.${gPrevLevel}`)
+        elPrevLevel.style.backgroundColor = ''
+        elBtn.style.backgroundColor = 'rgb(142, 124, 124)'
+    }
+
     // Update best time per level
     const bestTime = localStorage.getItem(gGame.currLevel.SIZE)
     const elBestTime = document.querySelector('.best-time span')
     if (bestTime) elBestTime.innerText = bestTime
     else elBestTime.innerText = '00 : 00 : 00'
+    gPrevLevel = level
     restartVars()
 }
 
 function cellClicked(i, j, ev) {
     const currCell = gBoard[i][j]
-
     if (!gGame.isOn) return
     // Don't let user click cell if there is an interval running
-    if(gIsProcessing) return
+    if (gIsProcessing) return
     // Don't mark the first cell
     if (gIsFirstClick && ev.button === 2) return
     // Don't accept double-click 
@@ -158,7 +195,7 @@ function cellMarked(location) {
     const currCell = gBoard[location.i][location.j]
     if (currCell.isMarked) {
         currCell.isMarked = false
-        if (currCell.isMine) gGame.corrMarkedCount++
+        if (currCell.isMine) gGame.corrMarkedCount--
         renderCell(location, null, currCell.isShown)
     } else {
         currCell.isMarked = true

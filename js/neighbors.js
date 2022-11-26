@@ -79,6 +79,7 @@ function countNeighbors(cellI, cellJ, mat) {
     return neighborsCount
 }
 
+// Show neighbors then hide them
 function toggleNeighbors({ i, j }) {
     var state = null
     for (var nextI = i - 1; nextI <= i + 1; nextI++) {
@@ -97,5 +98,43 @@ function toggleNeighbors({ i, j }) {
             if (currCell.isMarked && !gIsHint) renderCell({ i: nextI, j: nextJ }, FLAG, false)
             state = null
         }
+    }
+}
+
+// Cells were changed, so change neighbors count around them
+function renderNeighbors(cells) {
+    // For each mine removed
+    for (var currIdx = 0; currIdx < cells.length; currIdx++) {
+        
+        // Go over their neighbors
+        var neighborsCount=0
+        for (var i = cells[currIdx].i - 1; i <= cells[currIdx].i + 1; i++) {
+            if (i < 0 || i >= gBoard.length) continue
+            for (var j = cells[currIdx].j - 1; j <= cells[currIdx].j + 1; j++) {
+                // Don't go over the cell that had the mine
+                if (i === cells[currIdx].i && j === cells[currIdx].j) continue
+                if (j < 0 || j >= gBoard[i].length) continue
+                
+                const currCell = gBoard[i][j]
+                if (currCell.isMine) neighborsCount++
+
+                // If the current cell will have 0 neighbors around it 
+                // and is shown, remove content from cell
+                if (currCell.minesAroundCount === 1 && currCell.isShown) {
+                    currCell.minesAroundCount--
+                    renderCell({ i, j }, null, currCell.isShown)
+                } else if (currCell.minesAroundCount) {
+                    currCell.minesAroundCount--
+                    if (currCell.isShown) {
+                        const strHTML = `<span class="color-${currCell.minesAroundCount}">${currCell.minesAroundCount}</span>`
+                        renderCell({ i, j }, strHTML, currCell.isShown)
+                    }
+                }
+
+            }
+        }
+        // Update the mines count around cell that had the mine
+        gBoard[cells[currIdx].i][cells[currIdx].j].minesAroundCount = neighborsCount
+
     }
 }

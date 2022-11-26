@@ -1,8 +1,4 @@
-button:not(.dark-mode,
-    .restart-btn,
-    .undo, .manual,
-    .boom,
-    .mega-hint) {
+button:not(.dark-mode, .restart-btn, .undo, .manual, .boom, .mega-hint, .exterminator) {
     background-color: rgb(199, 194, 194);
     padding: 10px;
     font-size: 14px;
@@ -47,14 +43,14 @@ button:hover {
     border-radius: 5px;
 }
 
-.dark-mode:hover,
 .undo:hover {
     cursor: not-allowed;
 }
 
 .manual,
 .boom,
-.mega-hint {
+.mega-hint,
+.exterminator {
     background-color: rgb(199, 194, 194);
     padding: 5px;
     font-size: 13px;
