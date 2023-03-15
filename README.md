@@ -26,9 +26,9 @@ A minesweeper game built in 4 days, using vanilla CSS. This is my first project 
 - **Best Time** - the fastest time is kept in the local storage (per level) and is shown on the page.
 - **Lives** - The user has 3 lives. When a mine is clicked, there is an indication to the user that he clicked a mine and the lives counter decreases. 
 - **The Smiley** - an indication of the game status:
-  - Normal 😃 
-  - Sad & Dead – LOSE 🤯 (stepped on a mine)
-  - Sunglasses – WIN 😎
+  - Normal 😊 
+  - Sad & Dead – LOSE 😖 (stepped on a mine)
+  - Sunglasses – WIN 😁
   - Clicking the smiley resets the game
 - **Hints** - The user has 3 hints. Once a hint is selected, when an unrevealed cell is clicked, the cell and its neighbors are revealed for a second, and the selected hint disappears.
 - **Mega-Hint** - works only once every game. It is used to reveal a whole area of the board for 2 seconds by clicking the area’s top-left cell and then the bottom-right cell.
