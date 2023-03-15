@@ -2,7 +2,7 @@
     <h1>Mine-Sweeper</h1>
 </div>
 
-A Minesweeper game built in 4 days, using vanilla css. This is my first project in Coding Academy! [Check it out here](https://moriahamami.github.io/Mine-Sweeper/ "Website link")!
+A minesweeper game built in 4 days, using vanilla css. This is my first project in Coding Academy! [Check it out here.](https://moriahamami.github.io/Mine-Sweeper/ "Website link")
 
 ![Main board image](img/readme-img.png "Board-main-page")
 
