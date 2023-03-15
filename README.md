@@ -25,17 +25,17 @@ A minesweeper game built in 4 days, using vanilla CSS. This is my first project 
 
 ## Special Features
 - **Timer** - starts on the first click and stops when the game is over.
+- **Best Time** - the fastest time is kept in the local storage (per level) and is shown on the page.
 - **Lives** - The user has 3 lives. When a mine is clicked, there is an indication to the user that he clicked a mine and the lives counter decreases. 
-- **The Smiley** - an inidcation of the game status:
+- **The Smiley** - an indication of the game status:
   - Normal 😃 
   - Sad & Dead – LOSE 🤯 (stepped on a mine)
   - Sunglasses – WIN 😎
   - Clicking the smiley resets the game
 - **Hints** - The user has 3 hints. Once a hint is selected, when an unrevealed cell is clicked, the cell and its neighbors are revealed for a second, and the selected hint disappears.
-- **Best Time** - the fastest time is kept in the local storage (per level) and is shown on the page.
-- **Safe click** - The user has 3 Safe-Clicks. Clicking the Safe-Click button will mark a random covered cell for a few seconds that is safe to click (does not contain a mine). The remaining Safe-Clicks count is presented.
-- **Manually positioned mines** - a “manually create” mode in which the user first positions the mines (by clicking cells) and then plays.
-- **7 BOOM!** - a game mode where the game restarts and locates the mines according to the “7 BOOM” principles (each cell-index that contains “7” or a multiplication of “7” has a mine). 
-- **Dark mode**
 - **Mega-Hint** - works only once every game. It is used to reveal a whole area of the board for 2 seconds by clicking the area’s top-left cell and then the bottom-right cell.
 - **Mine Exterminator**- Clicking the “Exterminator” button, eliminate 3 of the existing mines, randomly. The deleted mines are marked for 2-3 seconds. 
+- **Safe click** - The user has 3 Safe-Clicks. Clicking the Safe-Click button will mark a random covered cell for a few seconds that is safe to click (does not contain a mine). The remaining Safe-Clicks count is presented.
+- **Manually positioned mines** - a “manually create” mode in which the user first positions the mines (by clicking cells) and then plays.
+- **7 Boom** - a game mode where the game restarts and locates the mines according to the “7 BOOM” principles (each cell-index that contains “7” or a multiplication of “7” has a mine). 
+- **Dark mode**
