@@ -12,7 +12,7 @@ A minesweeper game built in 4 days, using vanilla CSS. This is my first project 
   - Mine was clicked – reveals the mine clicked.
   - Cell (without a mine) with neighbors – reveals the cell.
   - Cell (without a mine) without neighbors – reveals the cell, all the empty neighboring cells, and their numbered neighbors using recursion.
- - The game includes 3 levels:
+- The game includes 3 levels:
   - Beginner (4 * 4 with 2 mines)
   - Medium (8 * 8 with 14 mines)
   - Expert (12 * 12 with 32 mines)
