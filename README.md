@@ -7,21 +7,19 @@ A minesweeper game built in 4 days, using vanilla CSS. This is my first project 
 ![Main board image](img/readme-img.png "Board-main-page")
 
 ## Instructions
-- Left click reveals the cell’s content.
 - Right click flags/unflags a suspected cell (you cannot reveal a flagged cell).
-- Game ends when:
-  - Lose: when clicking a mine.
-  - Win: all the mines are flagged, and all the other cells are shown.
-- The game includes 3 levels:
-  - Beginner (4 * 4 with 2 mines)
-  - Medium (8 * 8 with 14 mines)
-  - Expert (12 * 12 with 32 mines)
 - Expanding: When left clicking on cells there are 3 possible cases:
   - Mine was clicked – reveals the mine clicked.
   - Cell (without a mine) with neighbors – reveals the cell.
   - Cell (without a mine) without neighbors – reveals the cell, all the empty neighboring cells, and their numbered neighbors using recursion.
+ - The game includes 3 levels:
+  - Beginner (4 * 4 with 2 mines)
+  - Medium (8 * 8 with 14 mines)
+  - Expert (12 * 12 with 32 mines)
+- Game ends when:
+  - Lose: when clicking a mine.
+  - Win: all the mines are flagged, and all the other cells are shown.
 - The first clicked cell is never a mine (mines are placed and neighbors are counted only after the first click).
-
 
 ## Special Features
 - **Timer** - starts on the first click and stops when the game is over.
